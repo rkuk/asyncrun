@@ -1,0 +1,25 @@
+{
+  "name": "asyncrun",
+  "version": "1.0.0",
+  "description": "utils to run multiple async functions or an async functions with multiple parameters concurrently",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rkuk/asyncrun.git"
+  },
+  "keywords": [
+    "async",
+    "javascript",
+    "ECMAScript",
+    "node.js"
+  ],
+  "author": "rkuk",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/rkuk/asyncrun/issues"
+  },
+  "homepage": "https://github.com/rkuk/asyncrun#readme"
+}
