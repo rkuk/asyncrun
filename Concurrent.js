@@ -3,8 +3,9 @@
 let EventEmitter = require('events').EventEmitter;
 
 /**
- * Concurrent is used to run async function or method concurrently.
- * when running async method, you must pass bound mehtod to Concurrent.Runo.
+ * Concurrent is used to run functions or methods concurrently.
+ * functions and methods can be either normal functions or async functions.
+ * when running method, you must pass bound mehtod to Concurrent.Run.
  * To specify how many async functions can be run simultaneously,
  * you can pass concurrent running number when constructing Concurrent object.
  * 0 or less means run all async functions simultaneously without limit,
@@ -132,7 +133,15 @@ class AsyncWrapper{
 
     Run(...args){
         let self = this;
-        let promise = this.asyncfun(...args);
+        let promise = null;
+        try {
+            promise = this.asyncfun(...args);
+            //asyncfun not return Promise
+            if(!(promise && typeof promise.then == "function"))
+                promise = Promise.resolve(promise);
+        } catch (ex) {
+            promise = Promise.reject(ex);
+        }
         this.wait= promise.then(
             result=>({
                 index:self.index,
