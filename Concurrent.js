@@ -33,14 +33,14 @@ class Concurrent extends EventEmitter {
         if (this._status > 2)
             throw this.Status;
 
-        this._runningPromise = this._run(asyncfunctions, ...args);
+        this._runningPromise = this._run(asyncfunctions, args);
         return await this._runningPromise;
     }
 
     // if item in asycfunction is a method of some object
     // then it must be bind to the object before passed to Run
     // use `bind` method of Function can easily do this
-    async _run(asyncfunctions, ...args) {
+    async _run(asyncfunctions, args) {
         this._status = 3;
         let isMultiFunciton = asyncfunctions instanceof Array;
         let len = isMultiFunciton ? asyncfunctions.length : args.length;
@@ -62,7 +62,7 @@ class Concurrent extends EventEmitter {
                     args: params
                 };
                 this.emit("run", runEvent);
-                let wrapperReturn = wrapper.Run(...params);
+                let wrapperReturn = wrapper.Run(params);
                 waits.push(wrapperReturn.wait);
                 let runningEvent = {
                     index: index,
@@ -137,13 +137,13 @@ class AsyncWrapper {
         this.index = index;
     }
 
-    Run(...args) {
+    Run(args) {
         let self = this;
         let promise = null;
         try {
             promise = this.asyncfun(...args);
             //asyncfun not return Promise
-            if (!(promise && typeof promise.then == "function"))
+            if (promise == null || typeof promise.then != "function")
                 promise = Promise.resolve(promise);
         } catch (ex) {
             promise = Promise.reject(ex);
@@ -174,8 +174,8 @@ class AsyncWrapper {
 }
 
 class AsyncResults extends Array {
-    constructor(...args) {
-        super(...args);
+    constructor(length) {
+        super(length);
         this.SuccessIndices = [];
         this.ErrorIndices = [];
     }
